@@ -1,4 +1,4 @@
-# Spring Boot Bubble API Project
+# Bubble API
 
 This project is a Spring Boot application that provides a REST API for the Bubble application.
 
