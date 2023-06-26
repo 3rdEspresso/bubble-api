@@ -1,18 +1,38 @@
 type Query {
   userById(id: ID!): User
   deviceById(id: ID!): Device
-  deviceByIMEI(IMEI: String!): Device
 }
 
 type Mutation {
-  createUser(name: String!, avatar: String!): User
-  createDevice(name: String!, type: String!, os: OS!, IMEI: String!): Device
-  addDeviceToUser(userId: ID!, deviceId: ID!): User
+  createUserWithDevice(user: UserInput!, device: DeviceInput!): AuthResponse
+  sendOTP(deviceId: String!): Boolean
+  verifyOTP(deviceId: String!, otp: String!): AuthResponse
+  refreshToken: AuthResponse
+}
+
+input UserInput {
+  name: String!
+  avatar: String
+  username: String!
+}
+
+input DeviceInput {
+  id: String!
+  name: String!
+  type: String!
+  os: OS!
+}
+
+type AuthResponse {
+  user: User!
+  device: Device!
+  token: String!
 }
 
 type User {
   id: ID
   name: String!
+  username: String!
   avatar: String!
   primaryDevice: Device
 }
@@ -22,7 +42,6 @@ type Device {
   name: String!
   type: String!
   os: OS!
-  IMEI: String!
 }
 
 enum OS {

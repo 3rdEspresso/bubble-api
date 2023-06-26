@@ -13,12 +13,8 @@ public class DeviceService {
     @Autowired
     private DeviceRepository deviceRepository;
 
-    public Optional<Device> findDeviceById(UUID uuid) {
-        return deviceRepository.findDeviceById(uuid);
-    }
-
-    public Optional<Device> findDeviceByIMEI(String imei) {
-        return deviceRepository.findDeviceByIMEI(imei);
+    public Optional<Device> findDeviceById(String id) {
+        return deviceRepository.findDeviceById(id);
     }
 
     public Device saveDevice(Device device) {

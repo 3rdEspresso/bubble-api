@@ -1,9 +1,11 @@
 package com.bubble.bubbleapi.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "usr")
 public class User {
@@ -14,11 +16,11 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "username", unique = true)
+    private String username;
+
     @Column(name = "avatar")
     private String avatar;
-
-    @Column(name = "os")
-    private String os;
 
     // refer id from Device table as primaryDeviceId
     @OneToOne

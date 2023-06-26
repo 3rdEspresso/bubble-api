@@ -1,15 +1,16 @@
 package com.bubble.bubbleapi.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "device")
 public class Device {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name = "name")
     private String name;
@@ -19,7 +20,4 @@ public class Device {
 
     @Column(name = "os")
     private String os;
-
-    @Column(name = "IMEI")
-    private String IMEI;
 }
