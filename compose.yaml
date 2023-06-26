@@ -16,6 +16,8 @@ services:
     depends_on: [manager]
     environment: *AUTH
     command: "/wait-for-manager.sh"
+    deploy:
+      replicas: 2
     volumes:
       - healthcheck-volume:/healthcheck
   manager:

@@ -1,0 +1,31 @@
+type Query {
+  userById(id: ID!): User
+  deviceById(id: ID!): Device
+  deviceByIMEI(IMEI: String!): Device
+}
+
+type Mutation {
+  createUser(name: String!, avatar: String!): User
+  createDevice(name: String!, type: String!, os: OS!, IMEI: String!): Device
+  addDeviceToUser(userId: ID!, deviceId: ID!): User
+}
+
+type User {
+  id: ID
+  name: String!
+  avatar: String!
+  primaryDevice: Device
+}
+
+type Device {
+  id: ID
+  name: String!
+  type: String!
+  os: OS!
+  IMEI: String!
+}
+
+enum OS {
+  IOS
+  ANDROID
+}
