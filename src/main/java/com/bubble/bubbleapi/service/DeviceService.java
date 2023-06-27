@@ -2,6 +2,7 @@ package com.bubble.bubbleapi.service;
 
 import com.bubble.bubbleapi.entity.Device;
 import com.bubble.bubbleapi.repository.DeviceRepository;
+import com.bubble.bubbleapi.web.gql.errors.DeviceAlreadyUsedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class DeviceService {
     }
 
     public Device saveDevice(Device device) {
+        Optional<Device> existingDevice = deviceRepository.findDeviceById(device.getId());
+        if (existingDevice.isPresent()) {
+            throw new DeviceAlreadyUsedException();
+        }
+
         return deviceRepository.save(device);
     }
 }

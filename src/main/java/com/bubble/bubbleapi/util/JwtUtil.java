@@ -1,14 +1,16 @@
-package com.bubble.bubbleapi.configuration;
+package com.bubble.bubbleapi.util;
 import com.bubble.bubbleapi.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -16,8 +18,8 @@ public class JwtUtil {
 
     private String SECRET_KEY = "BVsEQvFzn4esZiuNgZD5obA0-xuPUSOEaiuZKvZPVLoZ6R_A76GN4F8FqZOcNOqgPiLXGkrs8eyHBgys09tuJw";
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public UUID extractUserId(String token) {
+        return UUID.fromString(extractClaim(token, Claims::getSubject));
     }
 
     public Date extractExpiration(String token) {
@@ -37,21 +39,20 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(UUID userId) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, userId.toString());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // 10 hours token validity
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))  // 7 days token validity
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, User userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 }
 
