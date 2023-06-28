@@ -23,4 +23,8 @@ public class UserService {
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username).orElse(null);
     }
+
+    public User findUserByNfcCardId(String nfcCardId) {
+        return userRepository.findUserByNfcCardId(nfcCardId).orElse(null);
+    }
 }

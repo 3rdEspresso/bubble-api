@@ -22,7 +22,9 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
-    // refer id from Device table as primaryDeviceId
+    @Column(name = "nfc_card_id")
+    private String nfcCardId;
+
     @OneToOne
     @JoinColumn(name = "primary_device_id", referencedColumnName = "id")
     private Device primaryDevice;

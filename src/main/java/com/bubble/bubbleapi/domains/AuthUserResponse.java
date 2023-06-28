@@ -7,8 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateUserResponse {
-    private Device device;
+public class AuthUserResponse {
     private User user;
     private String token;
 }
