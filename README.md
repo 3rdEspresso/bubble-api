@@ -10,7 +10,7 @@ This project is a Spring Boot application that provides a REST API for the Bubbl
 - Docker Compose
 
 ## Getting Started
-
+### Local Development
 1. Clone the repository:
 
    ```bash
@@ -19,7 +19,7 @@ This project is a Spring Boot application that provides a REST API for the Bubbl
 2. Navigate into the directory:
 
    ```bash
-   cd repository
+   cd bubble-api
    ```
 3. Build the project:
 
@@ -32,6 +32,23 @@ This project is a Spring Boot application that provides a REST API for the Bubbl
     ```bash
     ./gradlew bootRun
     ```
+
+### Running using Docker Compose
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/3rdEspresso/bubble-api.git
+    ```
+2. Navigate into the directory:
+
+   ```bash
+   cd bubble-api
+   ```
+3. Run docker compose:
+
+   ```bash
+   docker compose -f app.yml -f compose.yaml up -d --build
+   ```
 
 ## Using the Application
 
