@@ -34,4 +34,5 @@ This project is a Spring Boot application that provides a REST API for the Bubbl
     ```
 
 ## Using the Application
-> TBD
+
+Navigate to [http://localhost:8080/graphiql](http://localhost:8080/graphiql) to view the Interactive GraphQL.
