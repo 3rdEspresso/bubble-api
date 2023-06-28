@@ -1,6 +1,6 @@
 services:
   master:
-    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
+    container_name: "master_db"
     image: "citusdata/citus:11.3.0"
     ports: ["${COORDINATOR_EXTERNAL_PORT:-5432}:5432"]
     labels: ["com.citusdata.role=Master"]
@@ -21,7 +21,7 @@ services:
     volumes:
       - healthcheck-volume:/healthcheck
   manager:
-    container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_db_manager"
     image: "citusdata/membership-manager:0.3.0"
     volumes:
       - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
