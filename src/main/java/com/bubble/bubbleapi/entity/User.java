@@ -25,7 +25,7 @@ public class User {
     @Column(name = "nfc_card_id")
     private String nfcCardId;
 
-    @OneToOne
-    @JoinColumn(name = "primary_device_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "primary_device_id", referencedColumnName = "id", unique = true)
     private Device primaryDevice;
 }
