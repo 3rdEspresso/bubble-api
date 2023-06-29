@@ -1,5 +1,6 @@
 package com.bubble.bubbleapi.web.gql;
 
+import com.bubble.bubbleapi.domains.LoginCodeResponse;
 import com.bubble.bubbleapi.util.AuthUtil;
 import com.bubble.bubbleapi.util.JwtUtil;
 import com.bubble.bubbleapi.domains.AuthUserResponse;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -69,7 +71,27 @@ public class UserResource {
         return new AuthUserResponse(user, token);
     }
 
+    @QueryMapping
+    public AuthUserResponse loginViaSecondaryDeviceCode(@Argument String code) {
+        Optional<String> userId = userService.getUserIdViaLoginCode(code);
+        if (userId.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = userService.findUserById(UUID.fromString(userId.get()));
+        String token = jwtUtil.generateToken(user.getId());
+        return new AuthUserResponse(user, token);
+    }
+
     // --- MUTATIONS ---
+    @PreAuthorize("isAuthenticated()")
+    @MutationMapping
+    public LoginCodeResponse generateCodeForSecondaryDeviceLogin() {
+        UUID currentUserId = authUtil.getUserIdFromSecurityContext();
+        String code = userService.generateAndSaveLoginCode(currentUserId);
+        return new LoginCodeResponse(code);
+    }
+
     @MutationMapping
     public AuthUserResponse createUserWithDevice(@Argument User user, @Argument Device device) {
         Device savedDevice = deviceService.saveDevice(device);

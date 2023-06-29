@@ -28,5 +28,9 @@ services:
       - healthcheck-volume:/healthcheck
     depends_on: [master]
     environment: *AUTH
+  cache:
+    container_name: "${COMPOSE_PROJECT_NAME}_cache"
+    image: "redis:alpine"
+    ports: ["6379:6379"]
 volumes:
   healthcheck-volume:

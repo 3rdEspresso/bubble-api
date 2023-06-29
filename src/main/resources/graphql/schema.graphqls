@@ -3,6 +3,7 @@ type Query {
   deviceById(id: ID!): Device
   refreshToken: AuthResponse
   loginViaNfcCardAndDeviceId(nfcCardId: String!, deviceId: String!): AuthResponse
+  loginViaSecondaryDeviceCode(code: String!): AuthResponse
 }
 
 type Mutation {
@@ -10,6 +11,7 @@ type Mutation {
   sendOTP(deviceId: String!): Boolean
   verifyOTP(deviceId: String!, otp: String!): AuthResponse
   registerNFCCard(nfcCardId: String!): User
+  generateCodeForSecondaryDeviceLogin: LoginCodeResponse
 }
 
 input UserInput {
@@ -28,6 +30,10 @@ input DeviceInput {
 type AuthResponse {
   user: User!
   token: String!
+}
+
+type LoginCodeResponse {
+  code: String!
 }
 
 type User {
