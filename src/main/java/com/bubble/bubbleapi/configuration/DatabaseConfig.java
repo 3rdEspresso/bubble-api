@@ -2,6 +2,7 @@ package com.bubble.bubbleapi.configuration;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -17,11 +18,16 @@ public class DatabaseConfig {
     @Autowired
     DataSource dataSource;
 
+    @Value("${citus.enable}")
+    private boolean citusEnable;
+
     @PostConstruct
     public void executeSQLScript() throws IOException {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        String sqlScript = new String(Files.readAllBytes(Paths.get(getClass().getResource("/citus-distribute-tables.sql").getPath())), StandardCharsets.UTF_8);
-        jdbcTemplate.execute(sqlScript);
+        if (citusEnable) {
+            String sqlScript = new String(Files.readAllBytes(Paths.get(getClass().getResource("/citus-distribute-tables.sql").getPath())), StandardCharsets.UTF_8);
+            jdbcTemplate.execute(sqlScript);
+        }
     }
 }
 
