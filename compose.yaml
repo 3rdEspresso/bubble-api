@@ -1,7 +1,9 @@
 services:
   master:
     container_name: "master_db"
-    image: "citusdata/citus:11.3.0"
+    build:
+      context: .
+      dockerfile: Dockerfile.citus.arm64
     ports: ["${COORDINATOR_EXTERNAL_PORT:-5432}:5432"]
     labels: ["com.citusdata.role=Master"]
     environment: &AUTH
