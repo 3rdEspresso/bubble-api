@@ -1,17 +1,25 @@
 type Query {
+  # USER
   userById(id: ID!): User
   deviceById(id: ID!): Device
   refreshToken: AuthResponse
   loginViaNfcCardAndDeviceId(nfcCardId: String!, deviceId: String!): AuthResponse
   loginViaSecondaryDeviceCode(code: String!): AuthResponse
+
+  # ROOM
+  rooms: [Room]
 }
 
 type Mutation {
+  # USER
   createUserWithDevice(user: UserInput!, device: DeviceInput!): AuthResponse
   sendOTP(deviceId: String!): Boolean
   verifyOTP(deviceId: String!, otp: String!): AuthResponse
   registerNFCCard(nfcCardId: String!): User
   generateCodeForSecondaryDeviceLogin: LoginCodeResponse
+
+  # ROOM
+  createRoom(room: RoomInput!, participantIds: [ID]): Room
 }
 
 input UserInput {
@@ -27,6 +35,11 @@ input DeviceInput {
   os: OS!
 }
 
+input RoomInput {
+  name: String
+  type: RoomType!
+}
+
 type AuthResponse {
   user: User!
   token: String!
@@ -40,7 +53,7 @@ type User {
   id: ID
   name: String!
   username: String!
-  avatar: String!
+  avatar: String
   nfcCardId: String
   primaryDevice: Device
 }
@@ -52,7 +65,20 @@ type Device {
   os: OS!
 }
 
+type Room {
+  id: ID
+  name: String
+  type: RoomType!
+  createdBy: User!
+  participants: [User]
+}
+
 enum OS {
   IOS
   ANDROID
+}
+
+enum RoomType {
+  DM
+  GROUP
 }

@@ -3,7 +3,6 @@ package com.bubble.bubbleapi.service;
 import com.bubble.bubbleapi.domains.LoginCodeResponse;
 import com.bubble.bubbleapi.entity.User;
 import com.bubble.bubbleapi.repository.UserRepository;
-import com.bubble.bubbleapi.util.AuthUtil;
 import com.bubble.bubbleapi.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,6 +17,7 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -45,7 +45,7 @@ public class UserService {
         return userRepository.findUserByNfcCardId(nfcCardId).orElse(null);
     }
 
-    public String  generateAndSaveLoginCode(UUID userId) {
+    public String generateAndSaveLoginCode(UUID userId) {
         String loginCode = generateHexCode(6);
         valueOperations.set("loginCode_" + loginCode, userId.toString(), 5, java.util.concurrent.TimeUnit.MINUTES);
         return loginCode;

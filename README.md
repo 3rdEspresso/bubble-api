@@ -47,7 +47,7 @@ This project is a Spring Boot application that provides a REST API for the Bubbl
 3. Run docker compose:
 
    ```bash
-   docker compose -f app.yml -f compose.yaml up -d --build
+   docker compose -f app.yaml -f compose.yaml up -d --build
    ```
 
 ## Using the Application

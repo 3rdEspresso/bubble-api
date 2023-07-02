@@ -21,7 +21,7 @@ services:
     volumes:
       - healthcheck-volume:/healthcheck
   manager:
-    container_name: "${COMPOSE_PROJECT_NAME:-citus}_db_manager"
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}-db_manager"
     image: "citusdata/membership-manager:0.3.0"
     volumes:
       - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
@@ -29,8 +29,33 @@ services:
     depends_on: [master]
     environment: *AUTH
   cache:
-    container_name: "${COMPOSE_PROJECT_NAME}_cache"
+    container_name: "${COMPOSE_PROJECT_NAME}-cache"
     image: "redis:alpine"
     ports: ["6379:6379"]
+  vernemq:
+    container_name: "${COMPOSE_PROJECT_NAME}-vernemq"
+    image: "vernemq/vernemq:latest"
+    ports:
+      - "1883:1883"
+      - "8081:8080"
+      - "8888:8888"
+
+    environment:
+      - DOCKER_VERNEMQ_ACCEPT_EULA=yes
+      - DOCKER_VERNEMQ_ALLOW_ANONYMOUS=off
+      - DOCKER_VERNEMQ_PERSISTENT_CLIENT_EXPIRATION=1w
+      - DOCKER_VERNEMQ_PLUGINS__VMQ_ACL=off
+      - DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD=off
+      - DOCKER_VERNEMQ_PLUGINS__VMQ_WEBHOOKS=on
+      - DOCKER_VERNEMQ_VMQ_WEBHOOKS__AUTH_ON_REG__ENDPOINT=http://bubble-api-graphql:8080/api/webhook/vmq/auth_on_register
+      - DOCKER_VERNEMQ_VMQ_WEBHOOKS__AUTH_ON_REG__HOOK=auth_on_register
+      - DOCKER_VERNEMQ_VMQ_WEBHOOKS__AUTH_ON_PUB__ENDPOINT=http://bubble-api-graphql:8080/api/webhook/vmq/auth_on_publish
+      - DOCKER_VERNEMQ_VMQ_WEBHOOKS__AUTH_ON_PUB__HOOK=auth_on_publish
+      - DOCKER_VERNEMQ_VMQ_WEBHOOKS__AUTH_ON_SUB__ENDPOINT=http://bubble-api-graphql:8080/api/webhook/vmq/auth_on_subscribe
+      - DOCKER_VERNEMQ_VMQ_WEBHOOKS__AUTH_ON_SUB__HOOK=auth_on_subscribe
 volumes:
   healthcheck-volume:
+
+networks:
+  default:
+    name: "${COMPOSE_PROJECT_NAME}_default"
