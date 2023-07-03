@@ -27,7 +27,7 @@ public class WebhookResource {
     public VmqResponse authOnRegister(@RequestBody VmqRegisterRequestBody body) {
         Boolean valid = jwtUtil.validateToken(body.username());
         if (valid) {
-            return new VmqResponse();
+            return new VmqOkResponse();
         }
         return new VmqErrorResponse();
     }
@@ -69,7 +69,7 @@ public class WebhookResource {
                 Participant participant = roomService.findParticipantByRoomAndParticipant(roomId, userId);
                 if (participant != null) {
                     System.out.println("Publishing to topic: " + topicName);
-                    return new VmqResponse("ok");
+                    return new VmqOkResponse();
                 }
             }
         }

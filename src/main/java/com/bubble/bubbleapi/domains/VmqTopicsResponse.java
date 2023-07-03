@@ -5,11 +5,10 @@ import lombok.Data;
 import java.util.List;
 
 public class VmqTopicsResponse extends VmqResponse {
-    private final String result;
     private final List<Topic> topics;
 
     public VmqTopicsResponse() {
-        this.result = "ok";
+        super("ok");
         this.topics = null;
     }
 
